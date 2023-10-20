@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "phone")
 public class Phone {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idPhone")
+    @SequenceGenerator(name = "idPhone", initialValue = 5, allocationSize = 1)
     private Long id;
     private Long number;
     private Long citycode;

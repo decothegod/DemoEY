@@ -47,6 +47,7 @@ public class AuthService implements IAuthService {
             String token = jwtService.getToken(user);
             AuthResponse response = AuthResponse.builder()
                     .token(token)
+                    .expire(jwtService.getExpiration(jwtService.getToken(user)).toString())
                     .build();
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (UsernameNotFoundException e) {
@@ -94,6 +95,7 @@ public class AuthService implements IAuthService {
 
                         AuthResponse response = AuthResponse.builder()
                                 .token(jwtService.getToken(user))
+                                .expire(jwtService.getExpiration(jwtService.getToken(user)).toString())
                                 .build();
                         return new ResponseEntity<>(response, HttpStatus.OK);
                     } else {

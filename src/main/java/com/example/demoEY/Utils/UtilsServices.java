@@ -15,7 +15,7 @@ public class UtilsServices {
     }
 
     public static Boolean validatePassword(String pwd) {
-        String regexPattern = "(^([^A-Z]*[A-Z][^A-Z]*)(\\D*\\d\\D*\\d\\D*)$)|(^(\\D*\\d\\D*\\d\\D*)$)";
+        String regexPattern = "^(?=\\D*\\d\\D*\\d\\D*$)[^A-Z]*[A-Z][^A-Z]*$";
         return Pattern.compile(regexPattern)
                 .matcher(pwd)
                 .matches();
