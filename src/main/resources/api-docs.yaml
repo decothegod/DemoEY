@@ -1,0 +1,373 @@
+openapi: 3.0.1
+info:
+  title: User API
+  version: 0.0.1-SNAPSHOT
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /v1/user/{username}:
+    put:
+      tags:
+      - user-controller
+      summary: update a user
+      description: Update a user with the information provided.
+      operationId: updatedUser
+      parameters:
+      - name: username
+        in: path
+        description: The username
+        required: true
+        schema:
+          type: string
+        example: Jon Doe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedRequest'
+        required: true
+      responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "400":
+          description: Bad Request.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: "Success, returns the updated user."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+      security:
+      - Bearer Authentication: []
+    delete:
+      tags:
+      - user-controller
+      summary: Delete a user
+      description: Delete a user with the information provided.
+      operationId: deletedUser
+      parameters:
+      - name: username
+        in: path
+        description: The username
+        required: true
+        schema:
+          type: string
+        example: Jon Doe
+      responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "400":
+          description: Bad Request.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: "Success, returns the msg."
+          content:
+            '*/*':
+              schema:
+                type: string
+      security:
+      - Bearer Authentication: []
+  /v1/user/sign-up:
+    post:
+      tags:
+      - user-controller
+      summary: Register a new user
+      description: Register a new user with the information provided.
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+        required: true
+      responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "400":
+          description: Bad Request.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: "Success, returns the registered user and the token of the\
+            \ logged in user."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+  /v1/user/login:
+    post:
+      tags:
+      - user-controller
+      summary: Log in
+      description: Sign in with the provided credentials.
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        "401":
+          description: "Unauthorized, incorrect credentials."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: "Not found, user not found."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: "Success, returns the token of the logged in user."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+  /v1/user:
+    get:
+      tags:
+      - user-controller
+      summary: Get all users
+      description: Retrieves the complete list of users. Need a token generated upon
+        login or registration.
+      operationId: getAllUsers
+      responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: "Success, returns the list of users. If there are no users,\
+            \ it returns an empty list"
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+      security:
+      - Bearer Authentication: []
+  /v1/user/{userUUID}:
+    get:
+      tags:
+      - user-controller
+      summary: Get User by id
+      description: Retrieves a user by its UUID. Need a token generated upon login
+        or registration.
+      operationId: getUserByUUID
+      parameters:
+      - name: userUUID
+        in: path
+        description: The identifier code
+        required: true
+        schema:
+          type: string
+        example: 1f324716-6a52-4d51-8b58-63060582d1cb
+      responses:
+        "401":
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: "Not found, task not found."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: "Success, return the task."
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+      security:
+      - Bearer Authentication: []
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    PhoneDTO:
+      type: object
+      properties:
+        number:
+          type: string
+        citycode:
+          type: string
+        contrycode:
+          type: string
+    UpdatedRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneDTO'
+        active:
+          type: boolean
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneDTO'
+        created:
+          type: string
+        modified:
+          type: string
+        lastLogin:
+          type: string
+        token:
+          type: string
+        isActive:
+          type: boolean
+    RegisterRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneDTO'
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+  securitySchemes:
+    Bearer Authentication:
+      type: http
+      description: Need a token generated upon login or registration endpoints
+      scheme: bearer
+      bearerFormat: jwt
